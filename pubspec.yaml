@@ -1,0 +1,31 @@
+name: scanx
+description: AI-powered Document Scanner & OCR
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  camera: ^0.10.5
+  path_provider: ^2.1.2
+  google_mlkit_text_recognition: ^0.13.0
+  shared_preferences: ^2.2.2
+  pdf: ^3.10.4
+  share_plus: ^7.2.1
+  cross_file: ^0.3.4
+  image_picker: ^1.0.7
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png

@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+# Ignore build outputs and binaries
+build/
+android/app/libs/
+android/app/src/main/jniLibs/
+*.aar
+*.so

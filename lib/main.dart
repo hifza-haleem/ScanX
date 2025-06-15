@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'splash_page.dart';
 import 'home_page.dart';
 import 'history_page.dart';
+import 'package:flutter/material.dart';
+import 'crnn_ocr_utils.dart'; // Make sure import is correct
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Required for async in main()
+  await CRNNOCR.initialize(); // Preload TFLite model
   runApp(const ScanXApp());
 }
 

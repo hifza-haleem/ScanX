@@ -5,6 +5,8 @@ import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'scan_result_page.dart';
 import 'doc_cv_utils.dart';
+import 'crnn_ocr_utils.dart';
+import 'handwritten_result_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -133,6 +135,34 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // ************ HANDWRITTEN OCR BUTTON HANDLER **************
+  Future<void> _pickHandwrittenImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? imgFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (imgFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No image selected.")),
+      );
+      return;
+    }
+
+    setState(() => _isProcessing = true);
+
+    final bytes = await imgFile.readAsBytes();
+    String text = await CRNNOCR.recognize(bytes);
+
+    setState(() => _isProcessing = false);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HandwrittenResultPage(image: bytes, ocrText: text),
+      ),
+    );
+  }
+  // **********************************************************
+
   Widget _buildMainMenu() {
     return Center(
       child: SingleChildScrollView(
@@ -185,6 +215,22 @@ class _HomePageState extends State<HomePage> {
               onPressed: _isProcessing ? null : _pickFromGallery,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey[700],
+                foregroundColor: Colors.white,
+                minimumSize: const Size(250, 56),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(height: 18),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.gesture, size: 28),
+              label: const Text("Handwritten OCR (CRNN)",
+                  style: TextStyle(fontSize: 20)),
+              onPressed: _isProcessing ? null : _pickHandwrittenImage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange[700],
                 foregroundColor: Colors.white,
                 minimumSize: const Size(250, 56),
                 shape: RoundedRectangleBorder(

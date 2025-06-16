@@ -135,7 +135,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // ************ HANDWRITTEN OCR BUTTON HANDLER **************
   Future<void> _pickHandwrittenImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? imgFile = await picker.pickImage(source: ImageSource.gallery);
@@ -149,19 +148,25 @@ class _HomePageState extends State<HomePage> {
 
     setState(() => _isProcessing = true);
 
-    final bytes = await imgFile.readAsBytes();
-    String text = await CRNNOCR.recognize(bytes);
+    try {
+      final bytes = await imgFile.readAsBytes();
+      String text = await CRNNOCR.recognizeText(bytes);
 
-    setState(() => _isProcessing = false);
+      setState(() => _isProcessing = false);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HandwrittenResultPage(image: bytes, ocrText: text),
-      ),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HandwrittenResultPage(image: bytes, ocrText: text),
+        ),
+      );
+    } catch (e) {
+      setState(() => _isProcessing = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("OCR failed: $e")),
+      );
+    }
   }
-  // **********************************************************
 
   Widget _buildMainMenu() {
     return Center(

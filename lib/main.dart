@@ -3,7 +3,7 @@ import 'splash_page.dart';
 import 'home_page.dart';
 import 'history_page.dart';
 import 'package:flutter/material.dart';
-import 'crnn_ocr_utils.dart'; // Make sure import is correct
+import 'crnn_ocr_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required for async in main()
